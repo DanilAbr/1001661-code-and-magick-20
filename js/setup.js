@@ -74,26 +74,18 @@ function onPopupEscPress(evt) {
 
 function openPopup() {
   modal.classList.remove('hidden');
-
   document.addEventListener('keydown', onPopupEscPress);
 }
 
 function closePopup() {
   modal.classList.add('hidden');
-
   document.removeEventListener('keydown', onPopupEscPress);
 }
 
-function getCurrentColor(array, element, input) {
+function getCurrentColor(array, element, input, property) {
   var currentColor = getRandomElement(array);
-  element.style.fill = currentColor;
+  element.style[property] = currentColor;
   input.value = currentColor;
-}
-
-function getCurrentFireballColor(array, element, input) {
-  var currentFireballColor = getRandomElement(array);
-  element.style.background = currentFireballColor;
-  input.value = currentFireballColor;
 }
 
 setupOpenIcon.addEventListener('click', function () {
@@ -122,15 +114,15 @@ userNameInput.addEventListener('focus', function () {
 });
 
 wizardCoat.addEventListener('click', function () {
-  getCurrentColor(COAT_COLORS, wizardCoat, inputCoatColor);
+  getCurrentColor(COAT_COLORS, wizardCoat, inputCoatColor, 'fill');
 });
 
 wizardEyes.addEventListener('click', function () {
-  getCurrentColor(EYES_COLORS, wizardEyes, inputEyesColor);
+  getCurrentColor(EYES_COLORS, wizardEyes, inputEyesColor, 'fill');
 });
 
 wizardFireball.addEventListener('click', function () {
-  getCurrentFireballColor(FIREBALL_COLORS, wizardFireball, inputFireballColor);
+  getCurrentColor(FIREBALL_COLORS, wizardFireball, inputFireballColor, 'backgroundColor');
 });
 
 for (var j = 0; j < WIZARDS_COUNT; j++) {
