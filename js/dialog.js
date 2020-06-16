@@ -6,11 +6,16 @@
   var setupClose = setup.querySelector('.setup-close');
   var inputUserName = setup.querySelector('input[name="username"]');
   var dialogHandle = setup.querySelector('.upload');
+  var setupStartCoords = {};
 
   function onSetupCloseEscPress(evt) {
     if (evt.key === 'Escape') {
       evt.preventDefault();
       setup.classList.add('hidden');
+      setup.style = {
+        top: setupStartCoords.x + 'px',
+        left: setupStartCoords.y + 'px',
+      };
     }
   }
 
@@ -22,6 +27,10 @@
 
   function openPopup() {
     setup.classList.remove('hidden');
+    setupStartCoords = {
+      x: setup.offsetTop,
+      y: setup.offsetLeft
+    };
     document.addEventListener('keydown', onSetupCloseEscPress);
     setupClose.addEventListener('click', closePopup);
     setupClose.addEventListener('keydown', onSetupCloseEnterPress);
@@ -32,6 +41,10 @@
     document.removeEventListener('keydown', onSetupCloseEscPress);
     setupClose.removeEventListener('click', closePopup);
     setupClose.removeEventListener('keydown', onSetupCloseEnterPress);
+    setup.style = {
+      top: setupStartCoords.x + 'px',
+      left: setupStartCoords.y + 'px',
+    };
   }
 
   setupOpen.addEventListener('click', function () {
