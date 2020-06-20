@@ -16,17 +16,6 @@
     ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
   }
 
-  function getMaxElement(arr) {
-    var maxElement = arr[0];
-    for (var i = 1; i < arr.length; i++) {
-      if (arr[i] > maxElement) {
-        maxElement = arr[i];
-      }
-    }
-    return maxElement;
-  }
-
-
   window.renderStatistics = function (ctx, players, times) {
     renderCloud(ctx, 110, 20, 'rgba(0, 0, 0, 0.7)');
     renderCloud(ctx, 100, 10, '#fff');
@@ -37,7 +26,7 @@
     ctx.fillText('Ура вы победили!', CLOUD_X + GAP, CLOUD_Y + GAP);
     ctx.fillText('Список результатов:', CLOUD_X + GAP, CLOUD_Y + GAP * 2);
 
-    var maxTime = getMaxElement(times);
+    var maxTime = window.util.getMaxElement(times);
 
     players.forEach(function (item, i) {
       var currentBarHeight = (BAR_HEIGHT * times[i]) / maxTime;

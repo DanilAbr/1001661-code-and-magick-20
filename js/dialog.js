@@ -2,70 +2,81 @@
 
 (function () {
   var setup = document.querySelector('.setup');
+  var form = setup.querySelector('.setup-wizard-form');
   var setupOpen = document.querySelector('.setup-open-icon');
   var setupClose = setup.querySelector('.setup-close');
   var inputUserName = setup.querySelector('input[name="username"]');
-  var dialogHandle = setup.querySelector('.upload');
+  var popupHandle = setup.querySelector('.upload');
+  var setupSimilar = setup.querySelector('.setup-similar');
   var setupStartCoords = {};
+  var isData = false;
 
-  function onSetupCloseEscPress(evt) {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      setup.classList.add('hidden');
-      setup.style = {
-        top: setupStartCoords.x + 'px',
-        left: setupStartCoords.y + 'px',
-      };
-    }
-  }
-
-  function onSetupCloseEnterPress(evt) {
-    if (evt.key === 'Enter') {
-      closePopup();
-    }
-  }
-
-  function openPopup() {
-    setup.classList.remove('hidden');
-    setupStartCoords = {
-      x: setup.offsetTop,
-      y: setup.offsetLeft
-    };
-    document.addEventListener('keydown', onSetupCloseEscPress);
-    setupClose.addEventListener('click', closePopup);
-    setupClose.addEventListener('keydown', onSetupCloseEnterPress);
-  }
-
-  function closePopup() {
-    setup.classList.add('hidden');
-    document.removeEventListener('keydown', onSetupCloseEscPress);
-    setupClose.removeEventListener('click', closePopup);
-    setupClose.removeEventListener('keydown', onSetupCloseEnterPress);
+  function resetCoords() {
     setup.style = {
       top: setupStartCoords.x + 'px',
       left: setupStartCoords.y + 'px',
     };
   }
 
-  setupOpen.addEventListener('click', function () {
-    openPopup();
-  });
-
-  setupOpen.addEventListener('keydown', function (evt) {
-    if (evt.key === 'Enter') {
-      openPopup();
+  function onPopupCloseEscPress(evt) {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      setup.classList.add('hidden');
+      resetCoords();
     }
-  });
+  }
 
-  inputUserName.addEventListener('focus', function () {
-    document.removeEventListener('keydown', onSetupCloseEscPress);
-  });
+  function onPopupCloseEnterPress(evt) {
+    if (evt.key === 'Enter') {
+      closePopup();
+    }
+  }
 
-  inputUserName.addEventListener('blur', function () {
-    document.addEventListener('keydown', onSetupCloseEscPress);
-  });
+  function removePopupClassHidden() {
+    setup.classList.remove('hidden');
+  }
 
-  dialogHandle.addEventListener('mousedown', function (evt) {
+  function addPopupClassHidden() {
+    setup.classList.add('hidden');
+  }
+
+  function loadData() {
+    if (!isData) {
+      window.backend.transferData(
+          'GET',
+          window.backend.GET_URL,
+          onSuccess,
+          window.backend.createErrorMessage
+      );
+    }
+    isData = true;
+  }
+
+  function getPopupStartCoords() {
+    setupStartCoords = {
+      x: setup.offsetTop,
+      y: setup.offsetLeft
+    };
+  }
+
+  function openPopup() {
+    removePopupClassHidden();
+    getPopupStartCoords();
+    document.addEventListener('keydown', onPopupCloseEscPress);
+    setupClose.addEventListener('click', closePopup);
+    setupClose.addEventListener('keydown', onPopupCloseEnterPress);
+    loadData();
+  }
+
+  function closePopup() {
+    setup.classList.add('hidden');
+    document.removeEventListener('keydown', onPopupCloseEscPress);
+    setupClose.removeEventListener('click', closePopup);
+    setupClose.removeEventListener('keydown', onPopupCloseEnterPress);
+    resetCoords();
+  }
+
+  function movePopup(evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -99,11 +110,11 @@
 
       function onClickPreventDefault(clickEvt) {
         clickEvt.preventDefault();
-        dialogHandle.removeEventListener('click', onClickPreventDefault);
+        popupHandle.removeEventListener('click', onClickPreventDefault);
       }
 
       if (dragged) {
-        dialogHandle.addEventListener('click', onClickPreventDefault);
+        popupHandle.addEventListener('click', onClickPreventDefault);
       }
 
       document.removeEventListener('mousemove', onMouseMove);
@@ -112,5 +123,43 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+  }
+
+  function onSuccess(wizards) {
+    window.wizards.renderWizards(wizards);
+    setupSimilar.classList.remove('hidden');
+  }
+
+  function onSubmit(evt) {
+    window.backend.transferData(
+        'POST',
+        window.backend.SEND_URL,
+        addPopupClassHidden,
+        window.backend.createErrorMessage,
+        new FormData(form)
+    );
+    evt.preventDefault();
+  }
+
+  setupOpen.addEventListener('click', function () {
+    openPopup();
   });
+
+  setupOpen.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Enter') {
+      openPopup();
+    }
+  });
+
+  inputUserName.addEventListener('focus', function () {
+    document.removeEventListener('keydown', onPopupCloseEscPress);
+  });
+
+  inputUserName.addEventListener('blur', function () {
+    document.addEventListener('keydown', onPopupCloseEscPress);
+  });
+
+  popupHandle.addEventListener('mousedown', movePopup);
+
+  form.addEventListener('submit', onSubmit);
 })();
