@@ -8,7 +8,6 @@
   var setupClose = setup.querySelector('.setup-close');
   var inputUserName = setup.querySelector('input[name="username"]');
   var popupHandle = setup.querySelector('.upload');
-  var setupSimilar = setup.querySelector('.setup-similar');
 
   var setupStartCoords = {};
 
@@ -112,11 +111,6 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  }
-
-  function onSuccess(wizards) {
-    window.wizards.renderWizards(wizards);
-    setupSimilar.classList.remove('hidden');
   }
 
   function onSubmit(evt) {
