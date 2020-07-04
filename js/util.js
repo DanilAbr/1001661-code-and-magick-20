@@ -2,16 +2,23 @@
 
 (function () {
   window.util = {
-    getRandomElement: function (array) {
-      return array[Math.floor(Math.random() * array.length)];
+    getRandomElement: function (arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
     },
-    getMaxElement: function (array) {
-      var maxElement = array[0];
-      for (var i = 1; i < array.length; i++) {
-        if (array[i] > maxElement) {
-          maxElement = array[i];
+    getMaxElement: function (arr) {
+      var maxElement = arr[0];
+
+      for (var i = 1; i < arr.length; i++) {
+        if (arr[i] > maxElement) {
+          maxElement = arr[i];
         }
       }
+
+      arr.forEach(function (it) {
+        if (it > maxElement) {
+          maxElement = it;
+        }
+      });
       return maxElement;
     }
   };
