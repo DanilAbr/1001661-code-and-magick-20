@@ -53,7 +53,7 @@
     }
   }
 
-  function updateWizards() {
+  var updateWizards = window.debounce(function () {
     window.render.render(wizards.sort(function (left, right) {
       var rankDiff = getRank(right) - getRank(left);
       if (rankDiff === 0) {
@@ -61,7 +61,7 @@
       }
       return rankDiff;
     }));
-  }
+  });
 
   function loadData() {
     if (!isData) {
@@ -75,23 +75,35 @@
     isData = true;
   }
 
-  wizardCoat.addEventListener('click', function () {
+  function onCoatChange() {
     var newColor = window.util.getRandomElement(colors.COAT);
     wizardCoat.style.fill = newColor;
     coatColor = newColor;
     updateWizards();
-  });
+  }
 
-  wizardEyes.addEventListener('click', function () {
+  var onEyesChange = window.debounce(function () {
     var newColor = window.util.getRandomElement(colors.EYES);
     wizardEyes.style.fill = newColor;
     eyesColor = newColor;
     updateWizards();
   });
 
-  wizardFireball.addEventListener('click', function () {
+  function onFireballChange() {
     wizardFireball.style.backgroundColor =
       window.util.getRandomElement(colors.FIREBALL);
+  }
+
+  wizardCoat.addEventListener('click', function () {
+    onCoatChange();
+  });
+
+  wizardEyes.addEventListener('click', function () {
+    onEyesChange();
+  });
+
+  wizardFireball.addEventListener('click', function () {
+    onFireballChange();
   });
 
   window.script = {
