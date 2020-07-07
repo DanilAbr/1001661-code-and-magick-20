@@ -82,12 +82,12 @@
     updateWizards();
   }
 
-  var onEyesChange = window.debounce(function () {
+  function onEyesChange() {
     var newColor = window.util.getRandomElement(colors.EYES);
     wizardEyes.style.fill = newColor;
     eyesColor = newColor;
     updateWizards();
-  });
+  }
 
   function onFireballChange() {
     wizardFireball.style.backgroundColor =
