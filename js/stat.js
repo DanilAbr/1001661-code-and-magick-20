@@ -1,10 +1,13 @@
 'use strict';
 
 (function () {
-  var CLOUD_WIDTH = 420;
-  var CLOUD_HEIGHT = 270;
-  var CLOUD_X = 100;
-  var CLOUD_Y = 10;
+  var Cloud = {
+    WIDTH: 420,
+    HEIGHT: 270,
+    X: 100,
+    Y: 10,
+  };
+
   var GAP = 20;
   var BAR_GAP = 50;
   var FONT_GAP = 10;
@@ -13,7 +16,7 @@
 
   function renderCloud(ctx, x, y, color) {
     ctx.fillStyle = color;
-    ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
+    ctx.fillRect(x, y, Cloud.WIDTH, Cloud.HEIGHT);
   }
 
   window.renderStatistics = function (ctx, players, times) {
@@ -23,8 +26,8 @@
     ctx.fillStyle = '#000';
     ctx.font = '16px PT Mono';
     ctx.textBaseline = 'hanging';
-    ctx.fillText('Ура вы победили!', CLOUD_X + GAP, CLOUD_Y + GAP);
-    ctx.fillText('Список результатов:', CLOUD_X + GAP, CLOUD_Y + GAP * 2);
+    ctx.fillText('Ура вы победили!', Cloud.X + GAP, Cloud.Y + GAP);
+    ctx.fillText('Список результатов:', Cloud.X + GAP, Cloud.Y + GAP * 2);
 
     var maxTime = window.util.getMaxElement(times);
 
@@ -33,11 +36,11 @@
       var ranColor = 'hsl(240,' + Math.random() * 100 + '%,50%)';
 
       ctx.fillStyle = (item === 'Вы') ? 'rgba(255, 0, 0, 1)' : ranColor;
-      ctx.fillRect(CLOUD_X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i, CLOUD_Y + CLOUD_HEIGHT - currentBarHeight - BAR_GAP + FONT_GAP, BAR_WIDTH, currentBarHeight);
+      ctx.fillRect(Cloud.X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i, Cloud.Y + Cloud.HEIGHT - currentBarHeight - BAR_GAP + FONT_GAP, BAR_WIDTH, currentBarHeight);
 
       ctx.fillStyle = '#000';
-      ctx.fillText(Math.round(times[i]), CLOUD_X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i, CLOUD_Y + CLOUD_HEIGHT - currentBarHeight - BAR_GAP + FONT_GAP - GAP);
-      ctx.fillText(item, CLOUD_X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i, CLOUD_HEIGHT - GAP);
+      ctx.fillText(Math.round(times[i]), Cloud.X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i, Cloud.Y + Cloud.HEIGHT - currentBarHeight - BAR_GAP + FONT_GAP - GAP);
+      ctx.fillText(item, Cloud.X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i, Cloud.HEIGHT - GAP);
     });
   };
 })();

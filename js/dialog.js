@@ -2,14 +2,14 @@
 
 (function () {
   var setup = document.querySelector('.setup');
-  var form = setup.querySelector('.setup-wizard-form');
   var setupOpen = document.querySelector('.setup-open-icon');
+
+  var form = setup.querySelector('.setup-wizard-form');
   var setupClose = setup.querySelector('.setup-close');
   var inputUserName = setup.querySelector('input[name="username"]');
   var popupHandle = setup.querySelector('.upload');
-  var setupSimilar = setup.querySelector('.setup-similar');
+
   var setupStartCoords = {};
-  var isData = false;
 
   function resetCoords() {
     setup.style = {
@@ -21,7 +21,7 @@
   function onPopupCloseEscPress(evt) {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      setup.classList.add('hidden');
+      addPopupClassHidden();
       resetCoords();
     }
   }
@@ -40,18 +40,6 @@
     setup.classList.add('hidden');
   }
 
-  function loadData() {
-    if (!isData) {
-      window.backend.transferData(
-          'GET',
-          window.backend.GET_URL,
-          onSuccess,
-          window.backend.createErrorMessage
-      );
-    }
-    isData = true;
-  }
-
   function getPopupStartCoords() {
     setupStartCoords = {
       x: setup.offsetTop,
@@ -65,11 +53,11 @@
     document.addEventListener('keydown', onPopupCloseEscPress);
     setupClose.addEventListener('click', closePopup);
     setupClose.addEventListener('keydown', onPopupCloseEnterPress);
-    loadData();
+    window.script.loadData();
   }
 
   function closePopup() {
-    setup.classList.add('hidden');
+    addPopupClassHidden();
     document.removeEventListener('keydown', onPopupCloseEscPress);
     setupClose.removeEventListener('click', closePopup);
     setupClose.removeEventListener('keydown', onPopupCloseEnterPress);
@@ -123,11 +111,6 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  }
-
-  function onSuccess(wizards) {
-    window.wizards.renderWizards(wizards);
-    setupSimilar.classList.remove('hidden');
   }
 
   function onSubmit(evt) {
